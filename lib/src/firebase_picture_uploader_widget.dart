@@ -22,17 +22,22 @@ class PictureUploadSettings {
 
   /// the directory where you want to upload to
   final String uploadDirectory;
+
   /// the function which shall be called to upload the image, if you don't want to use the default one
   final Function customUploadFunction;
+
   /// the function which shall be called to delete the image, if you don't want to use the default one
-  final Function customDeleteFunction;  
+  final Function customDeleteFunction;
+
   /// the function which shall be called if an error occurs
   final Function onErrorFunction;
+
   /// the minimum images which shall be uploaded (controls the delete button)
   final int minImageCount;
+
   /// the maximum images which can be uploaded
   final int maxImageCount;
- 
+
   /// the settings how the image shall be modified before upload
   final ImageManipulationSettings imageManipulationSettings;
 }
@@ -43,13 +48,16 @@ class ImageManipulationSettings {
       this.maxWidth = 800,
       this.maxHeight = 800,
       this.compressQuality = 75});
-      
+
   /// the requested aspect ratio for the image
   final CropAspectRatio aspectRatio;
+
   /// the requested maxWidth of the image
   final int maxWidth;
+
   /// the requested maxHeight of the image
   final int maxHeight;
+
   /// the requested compressQuality of the image [0..100]
   final int compressQuality;
 }
@@ -65,12 +73,16 @@ class PictureUploadButtonStyle {
 
   /// the icon which shall be displayed within the upload button
   final IconData iconData;
+
   /// the icon size of the icon
   final double iconSize;
+
   /// the background color of the upload button
   final Color backgroundColor;
+
   /// the font color of the text within the upload button
   final Color fontColor;
+
   /// the font size of the text within the upload button
   final double fontSize;
 }
@@ -85,16 +97,20 @@ class PictureUploadWidget extends StatefulWidget {
       this.enabled = true});
 
   /// function is called after an image is uploaded, the the UploadJob as parameter
-  final Function onPicturesChange; 
+  final Function onPicturesChange;
+
   /// the images which shall be displayed initiall
-  final List<UploadJob> initialImages; 
+  final List<UploadJob> initialImages;
+
   /// the text displayed within the upload button
   final String buttonText;
+
   /// if false, the widget won't react if clicked
   final bool enabled;
- 
+
   /// all configuration settings for the upload
   final PictureUploadSettings settings;
+
   /// all ui customization settings for the upload button
   final PictureUploadButtonStyle buttonStyle;
 
@@ -315,8 +331,8 @@ class _SingleProfilePictureUploadWidgetState
     try {
       // in case of custom upload function, use it
       if (widget.settings.customUploadFunction != null) {
-        _uploadJob.storageReference = await
-            widget.settings.customUploadFunction(imageCropped, _uploadJob.id);
+        _uploadJob.storageReference = await widget.settings
+            .customUploadFunction(imageCropped, _uploadJob.id);
       } else {
         // else use default one
         _uploadJob.storageReference = await PictureUploadWidget
@@ -415,67 +431,67 @@ class _SingleProfilePictureUploadWidgetState
         onPressed: !widget.enabled ? null : _uploadImage);
   }
 
-  Widget getExistingImageWidget() {
-    final Container existingImageWidget = Container(
-        padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-        child: ClipRRect(
-          borderRadius: new BorderRadius.circular(8.0),
-          child: _uploadJob.imageProvider != null
-              ? Image(
-                  image: _uploadJob.imageProvider,
-                  width: 80.0,
-                  height: 100.0,
-                  fit: BoxFit.fitHeight)
-              : _uploadJob.image != null
-                  ? Image.file(
-                      _uploadJob.image,
-                      width: 80.0,
-                      height: 100.0,
-                      fit: BoxFit.fitHeight,
-                    )
-                  : Container(),
-        ));
+  // Widget getExistingImageWidget() {
+  //   final Container existingImageWidget = Container(
+  //       padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+  //       child: ClipRRect(
+  //         borderRadius: new BorderRadius.circular(20.0),
+  //         child: _uploadJob.imageProvider != null
+  //             ? Image(
+  //                 image: _uploadJob.imageProvider,
+  //                 width: 80.0,
+  //                 height: 100.0,
+  //                 fit: BoxFit.fitHeight)
+  //             : _uploadJob.image != null
+  //                 ? Image.file(
+  //                     _uploadJob.image,
+  //                     width: 80.0,
+  //                     height: 100.0,
+  //                     fit: BoxFit.fitHeight,
+  //                   )
+  //                 : Container(),
+  //       ));
 
-    final Widget processingIndicator = Container(
-        height: 110,
-        width: 80,
-        child: const Center(child: const CupertinoActivityIndicator()));
+  //   final Widget processingIndicator = Container(
+  //       height: 110,
+  //       width: 80,
+  //       child: const Center(child: const CupertinoActivityIndicator()));
 
-    final Widget deleteButton = Container(
-        height: 100,
-        width: 90,
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            GestureDetector(
-              onTap: !widget.enabled ? null : _deleteImage,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                      color: CupertinoColors.lightBackgroundGray, width: 1.0),
-                ),
-                height: 28.0, // height of the button
-                width: 28.0, // width of the button
-                child: Icon(Icons.close,
-                    color: CupertinoColors.systemBlue, size: 17.0),
-              ),
-            ),
-          ],
-        ));
+  //   final Widget deleteButton = Container(
+  //       height: 100,
+  //       width: 90,
+  //       color: Colors.transparent,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.end,
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: <Widget>[
+  //           GestureDetector(
+  //             onTap: !widget.enabled ? null : _deleteImage,
+  //             child: Container(
+  //               decoration: BoxDecoration(
+  //                 shape: BoxShape.circle,
+  //                 color: Colors.white,
+  //                 border: Border.all(
+  //                     color: CupertinoColors.lightBackgroundGray, width: 1.0),
+  //               ),
+  //               height: 28.0, // height of the button
+  //               width: 28.0, // width of the button
+  //               child: Icon(Icons.close,
+  //                   color: CupertinoColors.systemBlue, size: 17.0),
+  //             ),
+  //           ),
+  //         ],
+  //       ));
 
-    return new Stack(
-      children: [
-        existingImageWidget,
-        _uploadJob.uploadProcessing
-            ? processingIndicator
-            : widget.enableDelete ? deleteButton : Container(),
-      ],
-    );
-  }
+  //   return new Stack(
+  //     children: [
+  //       existingImageWidget,
+  //       _uploadJob.uploadProcessing
+  //           ? processingIndicator
+  //           : widget.enableDelete ? deleteButton : Container(),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -485,7 +501,7 @@ class _SingleProfilePictureUploadWidgetState
       return getNewImageButton();
     } else {
       return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        getExistingImageWidget(),
+        // getExistingImageWidget(),
       ]);
     }
   }
@@ -515,7 +531,7 @@ class UploadJob {
 
       // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
       final List<String> fileParts = fileName.split('_');
-      final String id = fileParts[fileParts.length-2];
+      final String id = fileParts[fileParts.length - 2];
       this.id = int.parse(id);
     }
   }
